@@ -37,8 +37,13 @@ contract StableCoin {
     }
 
     // Function to transfer tokens from one address to another
-    function transfer(address _to, uint256 _value) public {
-        require(balanceOf[msg.sender] >= _value && _value > 0);
+    
+    function transfer(address _to, uint256 _value) public returns (bool) {
+        // Check if the sender has enough funds
+        require(balanceOf[msg.sender] >= _value && _value > 0, "Not enough funds.");
+         
+        // Check if the recipient address is not the zero address
+        require(to != address(0), "Recipient address cannot be the zero address.");
 
         // Subtract from the sender's balance
         balanceOf[msg.sender] = balanceOf[msg.sender].sub(_value);
@@ -48,9 +53,16 @@ contract StableCoin {
 
         // Emit the Transfer event
         emit Transfer(msg.sender, _to, _value);
+              
+
+        // Return true on success
+        return true;
     }
 
-    // Function to approve another address to spend a specified amount of tokens on behalf of msg.sender
+
+
+
+// Function to approve another address to spend a specified amount of tokens on behalf of msg.sender
     function approve(address _spender, uint256 _value) public {
         require(_spender != address(0));
 
