@@ -38,28 +38,35 @@ contract StableCoin {
 
     // Function to transfer tokens from one address to another
     
-    function transfer(address _to, uint256 _value) public returns (bool) {
+    function transfer(address to, uint256 value) public returns (bool) {
         // Check if the sender has enough funds
-        require(balanceOf[msg.sender] >= _value && _value > 0, "Not enough funds.");
+        require(balanceOf[msg.sender] >= value && value > 0, "Not enough funds.");
          
         // Check if the recipient address is not the zero address
         require(to != address(0), "Recipient address cannot be the zero address.");
 
         // Subtract from the sender's balance
-        balanceOf[msg.sender] = balanceOf[msg.sender].sub(_value);
+        balanceOf[msg.sender] = balanceOf[msg.sender].sub(value);
 
         // Add to the recipient's balance
-        balanceOf[_to] = balanceOf[_to].add(_value);
+        balanceOf[to] = balanceOf[to].add(value);
 
         // Emit the Transfer event
-        emit Transfer(msg.sender, _to, _value);
+        emit Transfer(msg.sender, to, value);
               
 
         // Return true on success
         return true;
     }
+    
 
 
+// Function to check if the spender has enough allownace to transfer 
+
+    function transferFrom(address from, address to, uint256 value) public returns (bool) {
+        // Check if the spender has enough allowance
+        // (this function is required by the ERC20 standard, but not used in this example)
+    }
 
 
 // Function to approve another address to spend a specified amount of tokens on behalf of msg.sender
@@ -78,5 +85,15 @@ contract StableCoin {
     // Function to check the allowance of an address
     function allowance(address _owner, address _spender) public view returns (uint256) {
         return allowance[_owner][_spender];
+    }
+    
+        function balanceOf(address account) public view returns (uint256) {
+        // Return the balance of the given account
+        return balanceOf[account];
+    }
+
+    function totalSupply() public view returns (uint256) {
+        // Return the total supply of tokens
+        return totalSupply;
     }
 }
