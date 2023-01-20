@@ -1,0 +1,70 @@
+
+
+pragma solidity ^0.8.0;
+
+// Import the SafeMath library to handle arithmetic operations
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/contracts/math/SafeMath.sol";
+
+// Import the ERC20 library to implement the ERC20 token standard
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/contracts/token/ERC20/ERC20.sol";
+
+contract StableCoin {
+    using SafeMath for uint256;
+
+    // Declare variables for the total supply and the name of the token
+    uint256 totalSupply;
+    string public name;
+
+    // Implement the ERC20 standard
+    ERC20 public token;
+
+    // Declare a mapping to store the balance of each address
+    mapping(address => uint256) public balanceOf;
+
+    // Event to emit when a transfer occurs
+    event Transfer(address indexed from, address indexed to, uint256 value);
+
+    // Constructor function to initialize the contract
+    constructor() public {
+        totalSupply = 100000000; // Total supply of the stablecoin
+        name = "StableCoin"; // Name of the stablecoin
+
+        // Assign the total supply to the msg.sender address
+        balanceOf[msg.sender] = totalSupply;
+
+        // Create the ERC20 token
+        token = new ERC20(name, "SC", 18);
+    }
+
+    // Function to transfer tokens from one address to another
+    function transfer(address _to, uint256 _value) public {
+        require(balanceOf[msg.sender] >= _value && _value > 0);
+
+        // Subtract from the sender's balance
+        balanceOf[msg.sender] = balanceOf[msg.sender].sub(_value);
+
+        // Add to the recipient's balance
+        balanceOf[_to] = balanceOf[_to].add(_value);
+
+        // Emit the Transfer event
+        emit Transfer(msg.sender, _to, _value);
+    }
+
+    // Function to approve another address to spend a specified amount of tokens on behalf of msg.sender
+    function approve(address _spender, uint256 _value) public {
+        require(_spender != address(0));
+
+        // To change the approve amount you first have to reduce the addresses`
+        // allowance to zero by calling `approve(_spender, 0)` if it is not already 0 to mitigate the race condition described here: https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729
+        require(_value == 0 || allowance[msg.sender][_spender] == 0);
+
+        allowance[msg.sender][_spender] = _value;
+
+        emit Approval(msg.sender, _spender, _value);
+    }
+    
+    // Function to check the allowance of an address
+    function allowance(address _owner, address _spender) public view returns (uint256) {
+        return allowance[_owner][_spender];
+    }
+}
