@@ -11,7 +11,8 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/contracts/token/E
 contract StableCoin {
     using SafeMath for uint256;
 
-    // Declare variables for the total supply and the name of the token
+    // Declare variables for the total supply and the name of the token 
+
     uint256 totalSupply;
     string public name;
 
@@ -87,7 +88,7 @@ contract StableCoin {
         return allowance[_owner][_spender];
     }
     
-        function balanceOf(address account) public view returns (uint256) {
+    function balanceOf(address account) public view returns (uint256) {
         // Return the balance of the given account
         return balanceOf[account];
     }
@@ -96,4 +97,24 @@ contract StableCoin {
         // Return the total supply of tokens
         return totalSupply;
     }
+
+
+    // Function to mint new coins
+    function mint(uint256 _value) public {
+        // Code to update the total supply and the balance of the minter
+    }
+    
+    // Function to burn existing coins
+    function burn(uint256 _value) public {
+        // Code to update the total supply and the balance of the burner
+    }
+    
+    // Function to query the balance of an address
+    function balanceOf(address _owner) public view returns (uint256) {
+        // Code to return the balance of the specified address
+    }
+
+
+
+
 }
